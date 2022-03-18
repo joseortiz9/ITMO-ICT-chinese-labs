@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <div>
+        <h1>RIDERS</h1>
+        {% if can_edit %}
+            <a role="button" class="btn btn-primary" href="/riders/create">Create</a>
+        {% endif %}
+        <div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Experience</th>
+                    <th scope="col">Class Type</th>
+                    <th scope="col">Car description</th>
+                    <th scope="col">Owner</th>
+                    <th scope="col">Team</th>
+                    <th scope="col">Created at</th>
+                    {% if can_edit %}
+                        <th scope="col">Options</th>
+                    {% endif %}
+                </tr>
+                </thead>
+                <tbody>
+                {% for rider in page_obj %}
+                    <tr>
+                        <th scope="row">{{ rider.id }}</th>
+                        <th>{{ rider.first_name|capfirst }} {{ rider.last_name|capfirst }}</th>
+                        <th>{{ rider.description|capfirst }}</th>
+                        <th>{{ rider.experience }}</th>
+                        <th>{{ rider.class_type }}</th>
+                        <th>{{ rider.car_description }}</th>
+                        <th>{{ rider.creator.username|capfirst }}</th>
+                        <th>{{ rider.team.name|capfirst }}</th>
+                        <th>{{ rider.created_at }}</th>
+                        {% if can_edit %}
+                            <th><a class="nav-link" href="/riders/{{ rider.id }}/edit">Edit</a></th>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="pagination">
+            <span class="step-links">
+                {% if page_obj.has_previous %}
+                    <a href="?page=1">&laquo; first</a>
+                    <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+
+                <span class="current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span>
+
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">next</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
+    </div>
+
+{% endblock %}
