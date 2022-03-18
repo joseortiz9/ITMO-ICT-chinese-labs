@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+            crossorigin="anonymous"></script>
+    <title>HOTELS</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand{% if request.path == '/' %} active{% endif %}" aria-current="/" href="/">Main page</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav mr-auto">
+            {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link{% if request.path == '/rooms' %} active{% endif %}" href="/rooms">My rooms</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout1">Logout</a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link{% if request.path == '/login' %} active{% endif %}" href="/login">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link{% if request.path == '/register' %} active{% endif %}"
+                       href="/register">Register</a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-12">
+            <h2 class="display-1">Hotels</h2>
+            {% if request.path == '/' %}
+                {% if user.is_authenticated %}
+                    <blockquote class="blockquote">
+                        <p>Welcome to hotels system! <b>{{ user.username }}</b></p>
+                    </blockquote>
+                {% else %}
+                    <p>You are not logged in</p>
+                    <a href="/login">Log In</a>
+                {% endif %}
+            {% endif %}
+
+            <hr class="mt-0 mb-4">
+
+            {% block content %}
+            {% endblock %}
+        </div>
+    </div>
+</div>
+</body>
+</html>
