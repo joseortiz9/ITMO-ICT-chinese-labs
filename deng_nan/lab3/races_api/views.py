@@ -1,8 +1,14 @@
 from rest_framework import generics, views, status, permissions
 from rest_framework.response import Response
 
-from races_api.models import Race, Rider, Comment
-from races_api.serializers import RaceSerializer, RiderSerializer, CommentSerializer
+from races_api.models import Race, Rider, Comment, Team
+from races_api.serializers import RaceSerializer, RiderSerializer, CommentSerializer, TeamSerializer
+
+
+class TeamListView(generics.ListCreateAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    queryset = Team.objects.all()
+    serializer_class = TeamSerializer
 
 
 class RaceListView(generics.ListCreateAPIView):

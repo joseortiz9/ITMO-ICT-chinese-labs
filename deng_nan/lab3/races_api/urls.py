@@ -15,9 +15,12 @@ Including another URLconf
 """
 from django.urls import path
 
-from races_api.views import RaceDetailView, RaceListView, RidersListView, RidersDetailView, RaceCommentsView
+from races_api.views import RaceDetailView, RaceListView, RidersListView, RidersDetailView, RaceCommentsView, \
+    TeamListView
 
 urlpatterns = [
+    path('teams', TeamListView.as_view()),
+
     path('races', RaceListView.as_view()),
     path('races/<int:pk>', RaceDetailView.as_view()),
     path('races/<int:race_id>/comments', RaceCommentsView.as_view()),
