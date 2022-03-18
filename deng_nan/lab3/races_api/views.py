@@ -21,7 +21,7 @@ class RaceCommentsView(views.APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
     def get(self, request, race_id):
-        comments = Comment.objects.filter(race=race_id).all()
+        comments = Comment.objects.filter(race=race_id).order_by('-created_at')
         serializer = CommentSerializer(comments, many=True)
         return Response(serializer.data)
 

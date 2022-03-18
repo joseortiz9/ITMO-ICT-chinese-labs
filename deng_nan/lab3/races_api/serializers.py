@@ -10,7 +10,7 @@ class TeamSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class UserSerializer(serializers.ModelSerializer):
+class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
@@ -26,13 +26,13 @@ class RiderSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        representation['creator'] = UserSerializer(User.objects.get(pk=representation['creator_id'])).data
+        representation['creator'] = CustomUserSerializer(User.objects.get(pk=representation['creator_id'])).data
         representation['team'] = TeamSerializer(Team.objects.get(pk=representation['team_id'])).data
         return representation
 
 
 class RaceSerializer(serializers.ModelSerializer):
-    creator = UserSerializer()
+    creator = CustomUserSerializer()
     winner = RiderSerializer()
     riders = RiderSerializer(many=True)
 
@@ -57,5 +57,5 @@ class CommentSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        representation['creator'] = UserSerializer(User.objects.get(pk=representation['creator_id'])).data
+        representation['creator'] = CustomUserSerializer(User.objects.get(pk=representation['creator_id'])).data
         return representation
