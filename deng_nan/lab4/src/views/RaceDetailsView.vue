@@ -1,7 +1,11 @@
 <template>
   <v-app :class="{ 'pa-3': $vuetify.breakpoint.smAndUp }" :dark="true">
     <v-container>
-      <race-card :data="race" :clickable="false"></race-card>
+      <race-card
+        :data="race"
+        :clickable="false"
+        :show-riders="true"
+      ></race-card>
       <v-divider class="my-4"></v-divider>
       <v-data-table
         :headers="commentsHeaders"
@@ -83,7 +87,8 @@
 
 <script>
 import RaceCard from "@/components/RaceCard";
-import axiosInstance from "@/utils";
+import { getCreatorName } from "@/utils";
+import axiosInstance from "@/utils/axios";
 
 export default {
   name: "RaceDetails",
@@ -148,9 +153,7 @@ export default {
           if (response.status === 200) {
             this.comments = response.data.map((item) => ({
               ...item,
-              creator_name:
-                item.creator.username ||
-                `${item.creator.first_name} ${item.creator.last_name}`,
+              creator_name: getCreatorName(item.creator),
             }));
           } else throw new Error("Error");
         })

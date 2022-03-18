@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import axiosInstance from "@/utils";
+import axiosInstance from "@/utils/axios";
 import RaceCard from "@/components/RaceCard";
 
 export default {
