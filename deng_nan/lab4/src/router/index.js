@@ -3,18 +3,24 @@ import VueRouter from "vue-router";
 import RacesList from "@/views/RacesListView";
 import UserAuth from "@/views/UserAuthView";
 import RidersListView from "@/views/RidersListView";
+import RaceDetailsView from "@/views/RaceDetailsView";
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: "/races",
-    name: "Races",
+    name: "RacesList",
     component: RacesList,
   },
   {
+    path: "/races/:id",
+    name: "RaceDetails",
+    component: RaceDetailsView,
+  },
+  {
     path: "/riders",
-    name: "Riders",
+    name: "RidersList",
     component: RidersListView,
   },
   {
