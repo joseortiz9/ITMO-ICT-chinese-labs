@@ -1,2 +1,1 @@
-# ITMO-ICT-chinese-labs
-a
+# ICT Deng Nan Labs
