@@ -7,8 +7,8 @@ from .models import Comment
 class CommentForm(forms.ModelForm):
     text = forms.CharField(label="Comment", required=True)
     rating = forms.IntegerField(label="Rating", max_value=10, min_value=1, required=True)
-    start_date = forms.DateField(label="Begin day", required=False)
-    finish_date = forms.DateField(label="Finish day", required=False)
+    start_date = forms.DateField(label="Begin day", required=True)
+    finish_date = forms.DateField(label="Finish day", required=True)
 
     class Meta:
         model = Comment
