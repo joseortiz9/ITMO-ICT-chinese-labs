@@ -1,7 +1,68 @@
 {% extends 'base.html' %}
+{% load crispy_forms_filters %}
 
 {% block content %}
     <div>
         <h1>ROOM DETAILS</h1>
+        <div class="card" style="max-width: 18em;">
+            <div class="card-body">
+                <p>{{ room.text }}</p>
+                <p><b>№:</b> {{ room.room_number }}</p>
+                <p><b>Price:</b> ${{ room.price }}</p>
+                <p><b>Type:</b> {{ room.type }}</p>
+                <p><b>Hotel:</b> {{ room.hotel.name }}</p>
+            </div>
+        </div>
+        <hr>
+        <h5>Comments:</h5>
+        <div class="row">
+            {% for comment in page_obj %}
+                <div class="col">
+                    <div class="card" style="max-width: 18em;">
+                        <div class="card-body">
+                            <p>{{ comment.text }}</p>
+                            <p><b>Rating:</b> {{ comment.rating }}/10</p>
+                            <p><b>Type:</b> {{ comment.type }}</p>
+                            <p><b>Created at:</b> {{ comment.created_at }}</p>
+                            <p>
+                                <b>User: {{ comment.creator.username }}</b>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">next</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+        </div>
+        <hr>
+        <div class="card">
+            <div class="card-body">
+                <h5>Add comment:</h5>
+                {% if request.user.is_authenticated %}
+                    <form action="/rooms/{{ room.id }}" method="post">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <input type="submit" name="" value="Comment">
+                    </form>
+                {% else %}
+                    <p>To comment, you need to Log In</p>
+                {% endif %}
+            </div>
+        </div>
     </div>
 {% endblock %}

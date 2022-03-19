@@ -4,8 +4,8 @@ from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, get_object_or_404
 
-from hotels.form import UserForm
-from hotels.models import Hotel, Room
+from hotels.form import UserForm, CommentForm
+from hotels.models import Hotel, Room, Comment
 
 
 def index(request):
@@ -53,7 +53,23 @@ def user_rooms(request):
 
 @login_required
 def room_details(request, room_id):
-    return render(request, 'room.html')
+    room = get_object_or_404(Room, pk=room_id)
+
+    comments = Comment.objects.filter(room=room_id).all()
+    paginator = Paginator(comments, 3)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    form = CommentForm(request.POST)
+    if form.is_valid():
+        new_form = form.save(commit=False)
+        new_form.post = form
+        new_form.room_id = room_id
+        new_form.creator_id = request.user.id
+        new_form.save()
+        return HttpResponseRedirect('/rooms/{}'.format(room_id))
+
+    return render(request, 'room.html', {'room': room, 'form': form, 'page_obj': page_obj})
 
 
 def user_login(request):
