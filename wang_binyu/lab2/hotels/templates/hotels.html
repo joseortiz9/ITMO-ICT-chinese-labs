@@ -3,5 +3,46 @@
 {% block content %}
     <div>
         <h1>HOTELS TABLE</h1>
+        <div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Owner</th>
+                    <th scope="col">Created at</th>
+                    <th scope="col">Options</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for hotel in page_obj %}
+                    <tr>
+                        <th scope="row">{{ hotel.id }}</th>
+                        <th>{{ hotel.name|capfirst }}</th>
+                        <th>{{ hotel.owner.username|capfirst }}</th>
+                        <th>{{ hotel.created_at }}</th>
+                        <th><a class="nav-link" href="/hotels/{{ hotel.id }}">See</a></th>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="pagination">
+            <span class="step-links">
+                {% if page_obj.has_previous %}
+                    <a href="?page=1">&laquo; first</a>
+                    <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+
+                <span class="current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span>
+
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">next</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
     </div>
 {% endblock %}

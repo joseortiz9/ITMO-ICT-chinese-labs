@@ -22,6 +22,7 @@ urlpatterns = [
     path('hotels/<int:hotel_id>', views.hotel_details, name='hotel_details'),
     path('rooms', views.user_rooms, name='user_rooms'),
     path('rooms/<int:room_id>', views.room_details, name='room_details'),
+    path('rooms/<int:room_id>/reserve', views.reserve_room, name='reserve_room'),
     path('login', views.user_login, name='user_login'),
     path('register', views.user_register, name='user_register'),
     path('logout1', views.user_logout, name='user_logout'),

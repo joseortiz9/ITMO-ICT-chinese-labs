@@ -26,7 +26,7 @@ class Room(models.Model):
     type = models.CharField(max_length=1, choices=ROOM_TYPES, default=ROOM_TYPES[0])
     price = models.FloatField(default=0, validators=[MinValueValidator(0)])
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
-    guests = models.ManyToManyField(settings.AUTH_USER_MODEL)
+    guests = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
