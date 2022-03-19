@@ -4,12 +4,6 @@ from rest_framework import serializers
 from hotels_api.models import Hotel, Comment, Room, Reservation
 
 
-class HotelSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Hotel
-        fields = '__all__'
-
-
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -17,6 +11,14 @@ class CustomUserSerializer(serializers.ModelSerializer):
             "id", "last_login", "is_superuser", "first_name", "username",
             "last_name", "email", "is_staff", "is_active", "date_joined"
         )
+
+
+class HotelSerializer(serializers.ModelSerializer):
+    owner = CustomUserSerializer()
+
+    class Meta:
+        model = Hotel
+        fields = ("id", "name", "owner", "created_at", "updated_at")
 
 
 class ReservationSerializer(serializers.ModelSerializer):
@@ -51,4 +53,3 @@ class CommentSerializer(serializers.ModelSerializer):
         representation = super().to_representation(instance)
         representation['creator'] = CustomUserSerializer(User.objects.get(pk=representation['creator_id'])).data
         return representation
-
