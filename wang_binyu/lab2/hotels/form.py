@@ -1,22 +1,31 @@
 from django import forms
 from django.contrib.auth.models import User
 
+from lab2 import settings
 from .models import Comment
 
 
 class CommentForm(forms.ModelForm):
     text = forms.CharField(label="Comment", required=True)
     rating = forms.IntegerField(label="Rating", max_value=10, min_value=1, required=True)
-    start_date = forms.DateField(label="Begin day", required=True)
-    finish_date = forms.DateField(label="Finish day", required=True)
+    start_date = forms.DateField(label="Begin day", required=True, input_formats=settings.DATE_INPUT_FORMATS,
+                                 widget=forms.DateInput(format='%d/%m/%Y', attrs={
+                                     'class': 'form-control datetimepicker-input',
+                                     'type': 'date',
+                                     'placeholder': '28/01/2022',
+                                     'data-target': '#datetimepicker1'
+                                 }))
+    finish_date = forms.DateField(label="Finish day", required=True, input_formats=settings.DATE_INPUT_FORMATS,
+                                  widget=forms.DateInput(format='%d/%m/%Y', attrs={
+                                      'class': 'form-control datetimepicker-input',
+                                      'type': 'date',
+                                      'placeholder': '29/01/2022',
+                                      'data-target': '#datetimepicker2'
+                                  }))
 
     class Meta:
         model = Comment
         fields = ["text", "rating", "start_date", "finish_date"]
-        widgets = {
-            "start_date": forms.DateInput(attrs={'type': 'date'}),
-            "finish_date": forms.DateInput(attrs={'type': 'date'})
-        }
 
 
 class UserForm(forms.ModelForm):
@@ -29,17 +38,3 @@ class UserForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('username', 'password', 'email', 'first_name', 'last_name')
-
-
-# class RiderForm(forms.ModelForm):
-#     first_name = forms.CharField(label="First name", required=True)
-#     last_name = forms.CharField(label="Last name", required=True)
-#     description = forms.CharField(label="Description")
-#     experience = forms.CharField(label="Experience")
-#     class_type = forms.ChoiceField(label="Class type", required=True, choices=RIDER_CLASS_TYPES)
-#     car_description = forms.CharField(label="Car Description")
-#     team_id = forms.ModelChoiceField(queryset=Team.objects.all(), label="Team")
-#
-#     class Meta:
-#         model = Rider
-#         fields = ('first_name', 'last_name', 'description', 'experience', 'class_type', 'car_description', 'team_id')

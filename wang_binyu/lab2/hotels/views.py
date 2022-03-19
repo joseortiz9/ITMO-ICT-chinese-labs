@@ -33,6 +33,15 @@ def hotel_details(request, hotel_id):
 
 
 @login_required
+def hotel_comments_last_month(request, hotel_id):
+    hotel = get_object_or_404(Hotel, pk=hotel_id)
+    rooms_ids = Room.objects.filter(hotel=hotel_id).values_list('id', flat=True)
+    comments = Comment.objects.filter(room__in=rooms_ids).order_by('start_date')
+    print(1)
+    return render(request, 'hotel-comments.html', {'hotel': hotel, 'comments': comments})
+
+
+@login_required
 def reserve_room(request, room_id):
     room = get_object_or_404(Room, pk=room_id)
     if room.guests.count() > 0:
