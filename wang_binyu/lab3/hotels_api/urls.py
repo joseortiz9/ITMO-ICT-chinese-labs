@@ -16,12 +16,15 @@ Including another URLconf
 from django.urls import path
 
 from hotels_api.views import HotelListView, RoomListView, HotelRoomsView, ReservationsView, ReservationsDetailsView, \
-    RoomCommentsView
+    RoomCommentsView, HotelDetailsView, RoomDetailsView, RoomReservationView
 
 urlpatterns = [
     path('hotels', HotelListView.as_view()),
+    path('hotels/<int:pk>', HotelDetailsView.as_view()),
     path('hotels/<int:hotel_id>/rooms', HotelRoomsView.as_view()),
     path('rooms', RoomListView.as_view()),
+    path('rooms/<int:pk>', RoomDetailsView.as_view()),
+    path('rooms/<int:room_id>/reserved', RoomReservationView.as_view()),
     path('rooms/<int:room_id>/comments', RoomCommentsView.as_view()),
     path('reservations', ReservationsView.as_view()),
     path('reservations/<int:pk>', ReservationsDetailsView.as_view()),

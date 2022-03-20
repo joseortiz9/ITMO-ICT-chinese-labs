@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
+from rest_framework.fields import SerializerMethodField
 
 from hotels_api.models import Hotel, Comment, Room, Reservation
 
@@ -24,22 +25,37 @@ class HotelSerializer(serializers.ModelSerializer):
 class ReservationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reservation
-        fields = ("costumer_id", "room_id", "start_date", "finish_date", "created_at", "updated_at")
+        fields = ("id", "costumer_id", "room_id", "start_date", "finish_date", "created_at", "updated_at")
 
     def validate(self, attrs):
         if attrs['start_date'] > attrs['finish_date']:
             raise serializers.ValidationError("finish must occur after start")
         return attrs
 
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['room'] = RoomSerializer(Room.objects.get(pk=representation['room_id'])).data
+        return representation
+
 
 class RoomSerializer(serializers.ModelSerializer):
-    reservations = ReservationSerializer(many=True)
+    def get_auth_reservation(self, instance):
+        if 'request' not in self.context:
+            return None
+        user_id = self.context['request'].user.id
+        room_id = instance.id
+        try:
+            return ReservationSerializer(Reservation.objects.filter(costumer_id=user_id, room_id=room_id).first()).data
+        except Exception:
+            return None
+
+    # reservations = ReservationSerializer(source='reservations', many=True)
+    # auth_reservation = SerializerMethodField(method_name='get_auth_reservation')
 
     class Meta:
         model = Room
         fields = (
-            "id", "room_number", "type", "price", "hotel_id",
-            "reservations", "created_at", "updated_at"
+            "id", "room_number", "type", "price", "hotel_id", "created_at", "updated_at"
         )
 
 
