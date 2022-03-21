@@ -1,22 +1,17 @@
 <template>
   <div>
-    <v-toolbar flat>
-      <v-toolbar-title class="grey--text">
-        {{ 'Books list' }}
+    <v-toolbar color="primary lighten-3" flat>
+      <v-toolbar-title class="white--text">
+        {{ 'Books table' }}
       </v-toolbar-title>
     </v-toolbar>
     <v-divider></v-divider>
     <v-data-table
         :headers="headers"
-        :items="hotels"
+        :items="books"
         :items-per-page="5"
         class="elevation-1"
-        @click:row="handleClickRow"
-    >
-      <template v-slot:item.actions="{ item }">
-        <v-icon small class="ml-2" @click="handleClickRow(item)">mdi-eye</v-icon>
-      </template>
-    </v-data-table>
+    ></v-data-table>
   </div>
 </template>
 
@@ -29,31 +24,27 @@ export default {
   name: 'BooksListView',
   data() {
     return {
-      hotels: [],
+      books: [],
       headers: [
-        { text: 'Actions', value: 'actions', sortable: false },
         { text: "#", value: "id" },
-        { text: "Name", value: "name" },
-        { text: "Owner", value: "creator_name" },
-        { text: "Created at", value: "created_at" },
+        { text: "Name", value: "book_name" },
+        { text: "Type", value: "Type" },
+        { text: "Published at", value: "year_of_pub" },
+        { text: "Author", value: "author_name" },
       ],
     };
   },
-  methods: {
-    handleClickRow(row) {
-      this.$router.push(`/hotels/${row.id}`);
-    },
-  },
+  methods: {},
   mounted() {
     axiosInstance
-        .get(`/api/hotels`)
+        .get(`/library/books`)
         .then((response) => {
           if (response.status === 200) {
-            this.hotels = response.data.map((item) => ({...item, creator_name: getCreatorName(item.owner)}));
+            this.books = response.data.books.map(item => ({...item, author_name: getCreatorName(item.author)}));
           } else throw new Error("Error");
         })
         .catch((err) => {
-          alert(`Error loading the hotels, try again - ${err}`);
+          alert(`Error loading the books, try again - ${err}`);
         });
   },
 };

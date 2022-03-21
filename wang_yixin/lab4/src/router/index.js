@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import UserAuthView from "@/views/UserAuthView";
 import BooksListView from "@/views/BooksListView";
+import AuthorsListView from "@/views/AuthorsListView";
 
 Vue.use(VueRouter);
 
@@ -10,6 +11,11 @@ const routes = [
     path: '/books',
     name: 'BooksList',
     component: BooksListView,
+  },
+  {
+    path: '/authors',
+    name: 'AuthorsList',
+    component: AuthorsListView,
   },
   // {
   //   path: '/books/:id',

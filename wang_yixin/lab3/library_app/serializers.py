@@ -8,6 +8,11 @@ class BookSerializer(serializers.ModelSerializer):
         model = Book
         fields = "__all__"
 
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['author'] = AuthorSerializer(Author.objects.get(pk=representation['author'])).data
+        return representation
+
 
 class ReaderSerializer(serializers.ModelSerializer):
 

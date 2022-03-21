@@ -70,6 +70,7 @@ export default {
       menuItems: [
         {title: 'Home', path: '/', icon: 'home'},
         {title: 'Books', path: '/books', icon: 'face'},
+        {title: 'Authors', path: '/authors', icon: 'face'},
         {title: 'Readers', path: '/readers', icon: 'lock_open'}
       ]
     };

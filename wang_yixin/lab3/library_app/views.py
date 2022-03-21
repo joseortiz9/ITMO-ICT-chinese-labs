@@ -1,4 +1,4 @@
-from rest_framework import generics, status
+from rest_framework import generics, status, permissions
 from rest_framework.views import APIView
 from .models import *
 from .serializers import *
@@ -19,14 +19,14 @@ class BookCreateAPIView(APIView):
     queryset = Book.objects.all()
 
     def post(self, request):
-
         print("REQUEST DATA", request.data)
         book = request.data.copy()
         print("PROF DATA", book)
         serializer = BookCreateSerializer(data=book)
         if serializer.is_valid(raise_exception=True):
             book_saved = serializer.save()
-        return Response({"Success": "Book '{}' created succesfully.".format(book_saved.book_name)})
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class BookView(APIView):
@@ -53,6 +53,12 @@ class ReaderAPIView(APIView):
         readers = Reader.objects.all()
         serializer = ReaderSerializer(readers, many=True)
         return Response({"readers": serializer.data})
+
+
+class AuthorAPIView(generics.ListCreateAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    queryset = Author.objects.all()
+    serializer_class = AuthorSerializer
 
 
 class ReaderCreateAPIView(APIView):
