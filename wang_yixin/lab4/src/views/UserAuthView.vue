@@ -122,7 +122,7 @@ export default {
           .then((response) => {
             sessionStorage.setItem('authToken', response.data.auth_token);
             sessionStorage.setItem('username', this.username);
-            window.location.href = '/books';
+            window.location.href = '/authors';
           })
           .catch((err) => {
             if (err?.response?.data) alert(JSON.stringify(err.response.data));

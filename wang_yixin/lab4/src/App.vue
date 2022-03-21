@@ -69,8 +69,8 @@ export default {
       groupLinks: null,
       menuItems: [
         {title: 'Home', path: '/', icon: 'home'},
-        {title: 'Books', path: '/books', icon: 'face'},
         {title: 'Authors', path: '/authors', icon: 'face'},
+        {title: 'Books', path: '/books', icon: 'face'},
         {title: 'Readers', path: '/readers', icon: 'lock_open'}
       ]
     };
@@ -107,6 +107,6 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-image: url("./assets/library-bg.jpg");
+  background: url("./assets/library-bg.jpg") sandybrown center repeat-y;
 }
 </style>
