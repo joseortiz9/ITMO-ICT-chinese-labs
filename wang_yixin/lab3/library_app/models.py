@@ -6,7 +6,7 @@ from django.db import models
 class Book(models.Model):
     id = models.IntegerField(primary_key=True, auto_created=True)
     book_name = models.CharField(max_length=240)
-    author = models.ForeignKey('Author', on_delete=models.SET_NULL, null=True, blank=True)
+    author = models.ForeignKey('Author', on_delete=models.SET_NULL, null=True)
     book_types = (
         ('n', 'novel'),
         ('m', 'magazine'),

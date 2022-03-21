@@ -21,10 +21,13 @@ class BookCreateAPIView(APIView):
     def post(self, request):
         print("REQUEST DATA", request.data)
         book = request.data.copy()
+        to_delete = Book.objects.filter(author=None).delete()
+        book['author'] = Author.objects.get(pk=book['author'])
+        book['id'] = Book.objects.all().order_by("-id").values_list('id', flat=True).first() + 1
         print("PROF DATA", book)
         serializer = BookCreateSerializer(data=book)
         if serializer.is_valid(raise_exception=True):
-            book_saved = serializer.save()
+            book_saved = serializer.save(author=book['author'])
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -59,6 +62,21 @@ class AuthorAPIView(generics.ListCreateAPIView):
     permission_classes = (permissions.IsAuthenticated,)
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
+
+
+class AuthorDetailsView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    queryset = Author.objects.all()
+    serializer_class = AuthorSerializer
+
+
+class AuthorBooksView(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request, author_id):
+        books = Book.objects.filter(author=author_id).order_by('-year_of_pub')
+        serializer = BookSerializer(books, many=True)
+        return Response(serializer.data)
 
 
 class ReaderCreateAPIView(APIView):

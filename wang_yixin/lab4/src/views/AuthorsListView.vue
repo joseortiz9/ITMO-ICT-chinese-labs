@@ -40,8 +40,7 @@ export default {
   },
   methods: {
     handleClickRow(row) {
-      console.log(row);
-      //this.$router.push(`/authors/${row.id}`);
+      this.$router.push(`/authors/${row.id}`);
     },
   },
   mounted() {
