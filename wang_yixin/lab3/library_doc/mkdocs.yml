@@ -1,0 +1,17 @@
+site_name: Описание сервиса "Библиотека"
+nav:
+ - Home: index.md
+ - model:
+     - "book": model/book.md
+     - "reader": model/reader.md
+     - "bookinstance": model/bookinstance.md
+     - "author": model/author.md
+ - Api:
+     - "api/[GET]": api/get.md
+     - "api/[POST]": api/post.md
+     - "api/[PUT & DELETE]": api/put_delete.md
+theme:
+ name: readthedocs
+ highlightjs: true
+
+
