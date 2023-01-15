@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+
+<body>
+<form method="post" class="ui-form" action="login">
+    {% csrf_token %}
+    <div class="form-row">
+        <p><label for="username">User:</label></p>
+        <input required autocomplete="off" type="text" name="username" placeholder="Username">
+    </div>
+    <br>
+    <div class="form-row">
+        <P><label for="password">Password:</label></P>
+        <input required autocomplete="off" type="password" name="password" placeholder="Password">
+    </div>
+    {% if error_msg %}<p><strong>{{ error_msg }}</strong></p>{% endif %}
+    <input type="submit" name="" value="Login" class="btn btn-primary text-uppercase">
+    <br>
+    <br>
+    If you don't have login <a href="register">Register</a>
+</form>
+</div>
+</body>
+</html>

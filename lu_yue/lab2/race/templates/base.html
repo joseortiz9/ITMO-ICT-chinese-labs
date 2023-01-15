@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+            crossorigin="anonymous"></script>
+    <title>RACES</title>
+</head>
+<body>
+<ul class="nav nav-pills nav-fill justify-content-center">
+    <li class="nav-item">
+        <a class="nav-link{% if request.path == '/' %} active{% endif %}" aria-current="/" href="/">Main page</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link{% if request.path == '/races' %} active{% endif %}" href="/races">Races</a>
+    </li>
+    {% if user.is_authenticated %}
+        <li class="nav-item">
+            <a class="nav-link{% if request.path == '/riders' %} active{% endif %}" href="/riders">My riders</a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="/logout1">Logout</a>
+        </li>
+    {% else %}
+        <li class="nav-item">
+            <a class="nav-link{% if request.path == '/login' %} active{% endif %}" href="/login">Login</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link{% if request.path == '/register' %} active{% endif %}" href="/register">Register</a>
+        </li>
+    {% endif %}
+
+</ul>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-12">
+            <h2 class="display-1">Races Score</h2>
+            {% if user.is_authenticated %}
+                <blockquote class="blockquote">
+                    <p>Welcome to races score! <b>{{ user.username }}</b></p>
+                </blockquote>
+            {% else %}
+                <p>You are not logged in</p>
+                <a href="/login">Log In</a>
+            {% endif %}
+            <hr class="mt-0 mb-4">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </div>
+</div>
+</body>
+</html>
