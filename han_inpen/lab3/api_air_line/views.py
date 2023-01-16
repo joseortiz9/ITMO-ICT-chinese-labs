@@ -5,54 +5,56 @@ from django.contrib.auth import authenticate
 
 from rest_framework import status
 from rest_framework import viewsets
-from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
-from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework_simplejwt.views import TokenObtainPairView
 
 from .serializers import (
-    CustomTokenObtainPairSerializer, user_token,User_serializer,Airline_serializer,Passenger_serializer,Review_serializer,Air_travel_serializer
+    User_serializer,Airline_serializer,Passenger_serializer,Review_serializer,Air_travel_serializer
 )
-from django.contrib.auth.models import User
 
+from rest_framework.views import APIView
+from rest_framework.authtoken.models import Token
+from django.contrib.auth import authenticate
 
+# The Login class is an APIView that handles user authentication by accepting a username 
+# and password in the request data, and using Django's built-in authenticate 
+# function to check if the provided credentials are valid. If they are, a new token 
+# is generated using Django Rest Framework's Token model and returned in the response. 
+# If the credentials are invalid, an error message is returned.
 
-class Login(TokenObtainPairView):
-    serializer_class = CustomTokenObtainPairSerializer
-
-    def post(self, request, *args, **kwargs):
-        username = request.data.get('username', '')
-        password = request.data.get('password', '')
-        user = authenticate(
-            username=username,
-            password=password
-        )
+class Login(APIView):
+    def post(self, request):
+        username = request.data.get("username")
+        password = request.data.get("password")
+        user = authenticate(username=username, password=password)
         if user:
-            login_serializer = self.serializer_class(data=request.data)
-            if user.is_active:
-                if login_serializer.is_valid():
-                    user_serializer = user_token(user)
-                    
-                    return Response({
-                        'token': login_serializer.validated_data.get('access'),
-                        'refresh-token': login_serializer.validated_data.get('refresh'),
-                        'user': user_serializer.data,
-                        'message': 'Successful Login'
-                    }, status=status.HTTP_200_OK)
-                return Response({'error': 'wrong username or password'}, status=status.HTTP_400_BAD_REQUEST)
-            return Response({'error': 'user not active'}, status=status.HTTP_400_BAD_REQUEST)
+            token, created = Token.objects.get_or_create(user=user)
+            return Response({"token": token.key}, status=status.HTTP_200_OK)
+        else:
+            return Response({"error": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
 
-        return Response({'error': 'wrong username or password'}, status=status.HTTP_400_BAD_REQUEST)
+# The Logout class is an APIView that handles user logout by deleting the current user's 
+# authentication token, forcing the user to re-authenticate on their next request.
+class Logout(APIView):
+    def post(self, request):
+        user = request.user
+        if user.is_authenticated:
+            # delete the token to force a login
+            request.user.auth_token.delete()
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response({"error": "user not authenticated"}, status=status.HTTP_400_BAD_REQUEST)
 
-class Logout(GenericAPIView):
-    def post(self, request, *args, **kwargs):
-        user = User.objects.filter(id=request.data.get('user', 0))
-        if user.exists():
-            RefreshToken.for_user(user.first())
-            return Response({'message': 'logged out successfully'}, status=status.HTTP_200_OK)
-        return Response({'error': 'user does not exist'}, status=status.HTTP_400_BAD_REQUEST)
+# The Airline_viewsets, Passenger_viewsets, Review_viewsets, User_viewsets, 
+# and Air_travel_viewsets classes are all viewsets that inherit from Django 
+# Rest Framework's ModelViewSet. They handle CRUD operations for their 
+# respective models (Airline, Passenger, Review, User, and Air_travel) and 
+# use serializers (Airline_serializer, Passenger_serializer, Review_serializer, 
+# User_serializer, and Air_travel_serializer) to handle the data conversion between 
+# the model and JSON. They also set the permission class to IsAuthenticated, meaning 
+# that only authenticated user can access these viewsets.
+
 
 class Airline_viewsets (viewsets.ModelViewSet):
     serializer_class = Airline_serializer
