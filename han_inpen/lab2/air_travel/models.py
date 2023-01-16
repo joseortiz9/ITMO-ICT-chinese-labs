@@ -9,27 +9,9 @@ AIR_TRAVEL_TYPES = [
         ('2', 'Departure'),
     ]
 
-
-class Airline(models.Model):
-    name = models.CharField(max_length=200)
-
-    def __str__(self):
-        return self.name
-
-class passenger(models.Model):
-    passenger = models.ForeignKey(User, on_delete=models.CASCADE)
-    ticket = models.CharField(max_length=200, null=True)
-    Air_travel = models.ForeignKey(Air_travel, on_delete=models.CASCADE)
-
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return "{}, {}".format(self.name, self.start_time)
-
 class Air_travel(models.Model):
-    flight_number, = models.CharField(max_length=200)
-    airline = models.ForeignKey(Airline, on_delete=models.CASCADE)
+    flight_number = models.CharField(max_length=200)
+    airline = models.CharField(max_length=200,null=True)
     departure = models.CharField(max_length=200)
     arrival = models.CharField(max_length=200)
     type = models.CharField(max_length=1, choices=AIR_TRAVEL_TYPES, default=AIR_TRAVEL_TYPES[0])
@@ -42,6 +24,17 @@ class Air_travel(models.Model):
     creator = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+class Passenger(models.Model):
+    passenger = models.ForeignKey(User, on_delete=models.CASCADE)
+    ticket = models.CharField(max_length=200, null=True)
+    Air_travel = models.ForeignKey(Air_travel, on_delete=models.CASCADE)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return "{}, {}".format(self.passenger.first_name,self.passenger.last_name, self.Air_travel.flight_number )
 
 
 class Comment(models.Model):

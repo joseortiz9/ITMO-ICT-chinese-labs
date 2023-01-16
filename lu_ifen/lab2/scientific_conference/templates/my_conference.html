@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Home </title>
+  </head>
+  <body>
+    {% for conference in list %}
+    <fieldset>
+        <br>
+        <legend style="text-align: center;"><h2>Conference: {{ conference.name }}</h2></legend>
+        <br>
+        <h4>Topics: {{ conference.topics }}</h4> 
+        <br>
+        <h3>Description:</h4>
+        <p>{{ conference.description_conference}}</p>
+        <br>
+        <h3>Venue: {{ conference.venue }}</h3> 
+        <br>
+        {{ conference.description_venue }}
+        <h4>Date: {{ conference.date }}</h4> 
+        <br>
+        <h4>Venue: {{ conference.conditions }}</h4> 
+        <br>
+        <br>
+        <div style="display:inline;">
+            <form action="http://127.0.0.1:8000/authors/{{ conference.id }}" method="post">
+                {% csrf_token %}
+                <input type="submit" name="" value="See authors">
+            </form>
+            <form action="http://127.0.0.1:8000/presentation_edit/{{ user.id }}/{{ conference.id }}" method="post">
+                {% csrf_token %}
+                <input type="submit" name="" value="delete">
+            </form>
+            <form action="http://127.0.0.1:8000/review/{{ user.id }}/{{ conference.id }}" method="post">
+                {% csrf_token %}
+                <input type="submit" name="" value="Review">
+            </form>
+        </div>
+        
+    </fieldset>
+    {% endfor %}
+    <br>
+    <br>
+    <form action="http://127.0.0.1:8000/conferences/{{ user.id }}" method="post">
+        {% csrf_token %}
+        <input type="submit" name="" value="Home">
+    </form>
+    <form action="http://127.0.0.1:8000/logout/" method="post">
+        {% csrf_token %}
+        <input type="submit" name="" value="Logout">
+    </form>
+  </body>
+</html>

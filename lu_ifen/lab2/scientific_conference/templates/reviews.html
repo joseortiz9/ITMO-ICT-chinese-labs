@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Review </title>
+  </head>
+  <body>
+    <h2>Review oft: {{conference.name}}</h2>
+    <br>
+    <div>
+    {% for review in list %}
+    <fieldset>
+      <br>
+      <legend>Review </legend>
+      <br>
+      <p>{{review.text}}</p>
+      <br>
+      <b>Rating: {{review.rating}}</b>
+    </fieldset>
+    {% endfor %}
+    </div>
+    <br>
+    <br>
+    <textarea name="text" rows="4" cols="50" form="review">Comment here about the flight...</textarea>
+    <form action="http://127.0.0.1:8000/create_review/{{ user }}/{{ conference.id }}" method="post" id="review">
+      {% csrf_token %}
+      <br>
+      <label>Rating the flight</label>
+      <input type="number" name="rating">
+      <br>
+      <br>
+      <input type="submit" value="Send">
+      <br>
+    </form>
+    <form action="http://127.0.0.1:8000/conferences/{{ user }}" method="post">
+      {% csrf_token %}
+      <input type="submit" name="" value="Home">
+    </form>
+  </body>
+</html>
